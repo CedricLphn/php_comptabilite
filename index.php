@@ -1,11 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Mes opérations</title>
-</head>
-<body>
-<h1>Ajouter une opération</h1>
 <?php
 if(isset($_POST['nom']) && isset($_POST['montant']) && isset($_POST['compte']))
 {
@@ -28,6 +20,15 @@ if(isset($_POST['nom']) && isset($_POST['montant']) && isset($_POST['compte']))
     }
 }
 ?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mes opérations</title>
+</head>
+<body>
+<h1>Ajouter une opération</h1>
+
 <form action="index.php" method="post">
 <label for="nom">Nom de l'opération : </label><input type="text" name="nom" placeholder="Nom de l'opération"><br />
 <label>Montant de l'opération : </label><input type="text" name="montant" placeholder="00,00"> €<br />
