@@ -20,11 +20,22 @@ if(isset($_POST['creation']))
 
 
 		if(is_numeric($solde_compte)) {
-		
-			// Insertion
+
+			// Vérification de 10 comptes bancaires maximums
+
+			$nombre_actuel = $bdd->prepare("SELECT COUNT(id_cb) AS nombre 
+			FROM compte_bancaire 
+			WHERE id_utilisateur = ?");
+			$nombre_actuel->execute(array($_SESSION['id']));
+			$nombre_actuel = $nombre_actuel->fetch();
+
+			if($nombre_actuel['nombre'] < 10)
+			{
+			
+				// Insertion
 
 			$req = $bdd->prepare("INSERT INTO compte_bancaire(id_utilisateur,nom_compte,type_compte,solde,devise) VALUES(:id_utilisateur,:nom_compte,:type_compte,:solde,:devise);");
-			$req->execute(array("id_utilisateur" => 1,
+			$req->execute(array("id_utilisateur" => $_SESSION['id'],
 			"nom_compte" => $nom_du_compte, 
 			"type_compte" => $type_de_compte, 
 			"solde" => $solde_compte, 
@@ -33,13 +44,19 @@ if(isset($_POST['creation']))
 			$req->closeCursor();
 
 			echo "Le compte a été crée.";
+			}else {
+				echo "Impossible de créer plus de dix comptes.";
+			}	
+
 
 		}else {
 			echo "Le solde du compte n'est pas un chiffre numérique";
 		}
 	
 	}
-	else {echo "Elément manquant";}
+	else {
+		echo "Elément manquant";
+	}
 
 
 }
@@ -60,6 +77,26 @@ if(isset($_POST['creation']))
 	</div>
 	<input type="submit" value="JDF" name="creation">
 </form>
+<hr />
+<h1>Mes comptes bancaires</h1>
+    <table>
+        <tr>
+            <td>#</td>
+            <td>Nom du compte</td>
+            <td>Type de compte</td>
+            <td>Devise</td>
+            <td>Opérations</td>
+        </tr>
+
+        <tr>
+            <td>1</td>
+            <td>Swiss Bank</td>
+            <td>Epargne</td>
+            <td>EUR</td>
+            <td>Modifier - Supprimer</td>
+        </tr>
+
+    </table>
 <?php
 require_once "fonctions/footer.php";
 ?>

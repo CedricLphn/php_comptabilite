@@ -4,7 +4,7 @@ USE comptabilite;
 
 CREATE TABLE utilisateur(
 	id_utilisateur INT UNSIGNED NOT NULL AUTO_INCREMENT,
-	mail VARCHAR (101) NOT NULL,
+	mail VARCHAR (101) NOT NULL UNIQUE,
 	mdp VARCHAR (101) NOT NULL,
 	PRIMARY KEY (id_utilisateur)
 )
@@ -22,8 +22,8 @@ ENGINE=INNODB;
 CREATE TABLE compte_bancaire(
 	id_cb INT UNSIGNED NOT NULL AUTO_INCREMENT,
 	id_utilisateur INT UNSIGNED NOT NULL,
-	nom_compte VARCHAR(50) NOT NULL,
-	type_compte ENUM ('courant','epargne','compte joint') NOT NULL,
+	nom_compte VARCHAR(50) NOT NULL UNIQUE,
+	type_compte ENUM ('courant','epargne','compte_joint') NOT NULL,
 	solde FLOAT(100,2) NOT NULL,
 	devise ENUM ('USD','EUR') NOT NULL,
 	PRIMARY KEY (id_cb),
