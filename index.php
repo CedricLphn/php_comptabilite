@@ -1,17 +1,22 @@
 <?php
-if(isset($_POST['nom']) && isset($_POST['montant']) && isset($_POST['compte']))
+
+require_once "fonctions/header.php";
+
+$bdd = connexion_bdd();
+
+if(isset($_POST['operation']))
 {
     // Les variables
-    $nom = $_POST['nom'];
-    $montant = $_POST['montant'];
-    $compte = $_POST['compte'];
+    $nom = htmlspecialchars($_POST['nom']);
+    $montant = htmlspecialchars($_POST['montant']);
+    $compte = htmlspecialchars($_POST['compte']);
 
     // Les conditions
     
     if($nom != NULL && $montant != NULL && $compte != NULL)
     {
         if(is_numeric($montant)) {
-            echo "Envoyé";
+            echo $nom;
         }else {
             echo "Le montant n'est pas un chiffre numérique";
         }
@@ -20,13 +25,6 @@ if(isset($_POST['nom']) && isset($_POST['montant']) && isset($_POST['compte']))
     }
 }
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Mes opérations</title>
-</head>
-<body>
 <h1>Ajouter une opération</h1>
 
 <form action="index.php" method="post">
@@ -37,7 +35,7 @@ if(isset($_POST['nom']) && isset($_POST['montant']) && isset($_POST['compte']))
   <option value="lcl">LCL (compte épargne)</option> 
   <option value="societegeniale" selected>Société Géniale (compte épargne)</option>
 </select>
-<input type="submit" />
+<input type="submit" name="operation" />
 
 </form>
 <hr />
@@ -62,5 +60,6 @@ if(isset($_POST['nom']) && isset($_POST['montant']) && isset($_POST['compte']))
         </tr>
 
     </table>
-</body>
-</html>
+<?php
+require_once "fonctions/footer.php"; 
+?>
