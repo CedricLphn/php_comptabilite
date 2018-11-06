@@ -15,7 +15,7 @@ if(isset($_POST['nom']) && isset($_POST['montant']) && isset($_POST['compte']))
         }else {
             echo "Le montant n'est pas un chiffre numérique";
         }
-    }else {
+        }else {
         echo "Un champ est vide.";
     }
 }
@@ -31,7 +31,7 @@ if(isset($_POST['nom']) && isset($_POST['montant']) && isset($_POST['compte']))
 
 <form action="index.php" method="post">
 <label for="nom">Nom de l'opération : </label><input type="text" name="nom" placeholder="Nom de l'opération"><br />
-<label>Montant de l'opération : </label><input type="text" name="montant" placeholder="00,00"> €<br />
+<label>Montant de l'opération : </label><input type="number" name="montant" placeholder="00,00"> €<br />
 <label>Compte : </label>
 <select id="compte" name="compte">
   <option value="lcl">LCL (compte épargne)</option> 
