@@ -43,3 +43,16 @@ CREATE TABLE operation(
 	FOREIGN KEY (id_categorie) REFERENCES categorie(id_categorie) ON DELETE CASCADE
 )
 ENGINE=INNODB;
+
+INSERT INTO categorie(nom_categorie, type_transaction)
+VALUES
+("Alimentaire", "debit"),
+("Vestimentaire", "debit"),
+("Loisir", "debit"),
+("Transport", "debit"),
+("Logement", "debit"),
+("Autres", "debit"),
+("Virement", "credit"),
+("Dépôt", "credit"),
+("Salaire", "credit"),
+("Autres", "credit");
