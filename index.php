@@ -111,7 +111,7 @@ if(isset($_POST['operation']))
             <td>12/12/2012</td>
             <td>LCL</td>
             <td>Overwatch</td>
-            <td>Pute</td>
+            <td></td>
             <td>100€</td>
             <td>Modifier - Supprimer</td>
         </tr>
