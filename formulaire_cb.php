@@ -129,7 +129,7 @@ if(isset($_GET['supprimer'])){
 
 }
 
-include("fonctions/pages/formulaire_cb.php");
-include("fonctions/pages/listing_cb.php");
+include("ressources/pages/formulaire_cb.php");
+include("ressources/pages/listing_cb.php");
 require_once "fonctions/footer.php";
 ?>

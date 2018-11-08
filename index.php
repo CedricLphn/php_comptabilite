@@ -1,5 +1,16 @@
 <?php
 
+//     ______          ___                ______           __                  
+//   / ________  ____/ (_____  ____ _   / ________ ______/ /_____  _______  __
+//  / /   / __ \/ __  / / __ \/ __ `/  / /_  / __ `/ ___/ __/ __ \/ ___/ / / /
+// / /___/ /_/ / /_/ / / / / / /_/ /  / __/ / /_/ / /__/ /_/ /_/ / /  / /_/ / 
+// \____/\____/\__,_/_/_/ /_/\__, /  /_/    \__,_/\___/\__/\____/_/   \__, /  
+//                          /____/                                   /____/   
+//
+// Team : Paul Derue, Jarno Rameter, Cédric Leprohon, Damien Jisseau
+// Thanks to "Jean-Michel PO"
+
+
 require_once "fonctions/header.php";
 
 
@@ -50,7 +61,56 @@ if(isset($_POST['operation']))
     {
         if(is_numeric($montant)) {
 
+
+            // On veut savoir si c'est un débit ou un crédit, 
+            // le problème : c'est qu'on peut le savoir uniquement grâce à la table categorie
+            // Solution: faire une requête dans la table categorie
+            
+            $req1 = $bdd->prepare("SELECT type_transaction FROM categorie 
+            WHERE id_categorie = ?");
+            $req1->execute (array(
+                $categorie
+            ));
+
+            $data_cat = $req1->fetch();
+
+
+            // On souhaite savoir le solde du compte bancaire
+            // Problème: il se situe dans le compte_bancaire (table)
+            // Solution: faire une requête dans le compte bancaire
+
+            $req2 = $bdd->prepare("SELECT solde FROM compte_bancaire 
+            WHERE id_cb = ?");
+            $req2->execute (array(
+                $compte
+            ));
+
+            $req2 = $req2->fetch();
+
+            $solde = $req2["solde"]; // This is the solde
+            
+
+            
+
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
             if($edit) {
+                
+               
+                // on récupère le montant de l'opération actuelle
+                $req_op = $bdd->prepare("SELECT montant_operation FROM operation WHERE id_operation = ?");
+                $req_op->execute(array($id_operation));
+                $req_op = $req_op->fetch();
+                
+                $ancien_montant_operation = $req_op["montant_operation"];
+
+                if($data_cat["type_transaction"] == "debit")
+                {
+                    
+                    $solde = ($solde + $ancien_montant_operation) - $montant;
+                }else {
+                    $solde = ($solde - $ancien_montant_operation) + $montant;
+                }
                 
                 $req = $bdd->prepare("UPDATE operation
                 SET nom_operation = :nom_operation, montant_operation = :montant_operation, id_categorie = :id_categorie, id_cb = :id_cb
@@ -74,57 +134,18 @@ if(isset($_POST['operation']))
                 "nom_operation" => $nom,
                 "montant_operation" => $montant));
 
-                echo "L'opération a été ajoutée.";
-            }
-
-
-            $req->closeCursor();
-
-            // On veut savoir si c'est un débit ou un crédit, 
-            // le problème : c'est qu'on peut le savoir uniquement grâce à la table categorie
-            // Solution: faire une requête dans la table categorie
-            
-            $req1 = $bdd->prepare("SELECT montant_operation type_transaction FROM categorie 
-            WHERE id_categorie = ?");
-            $req1->execute (array(
-                $categorie
-            ));
-
-            $data_cat = $req1->fetch();
-
-            // On souhaite savoir le solde du compte bancaire
-            // Problème: il se situe dans le compte_bancaire (table)
-            // Solution: faire une requête dans le compte bancaire
-
-            $req2 = $bdd->prepare("SELECT solde FROM compte_bancaire 
-            WHERE id_cb = ?");
-            $req2->execute (array(
-                $compte
-            ));
-
-            $req2 = $req2->fetch();
-
-            $solde = $req2["solde"]; // This is the solde
-
-            var_dump($data_cat);
-            die();
-
-            if($edit)
-            {
-                if($data_cat["type_transaction"] == "debit")
-                {
-                    $solde = ($solde + $data_cat['montant_operation']) - $montant;
-                }else {
-                    $solde = ($solde + $data_cat['montant_operation']) + $montant;
-                }
-            }else {
                 if($data_cat["type_transaction"] == "debit")
                 {
                     $solde = $solde - $montant;
                 }else {
                     $solde = $solde + $montant;
                 }
+                
+                echo "L'opération a été ajoutée.";
             }
+
+
+           $req->closeCursor();
 
             // On met à jour le solde
 
@@ -207,8 +228,8 @@ WHERE id_utilisateur = ?
 ORDER BY nom_compte ASC");
 $req_listing_cb->execute(array($_SESSION['id']));
 
-include("fonctions/pages/formulaire_operations.php");
-include("fonctions/pages/listing_operations.php");
+include("ressources/pages/formulaire_operations.php");
+include("ressources/pages/listing_operations.php");
 
 require_once "fonctions/footer.php"; 
 ?>
