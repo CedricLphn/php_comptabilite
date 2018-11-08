@@ -15,7 +15,7 @@
 	}
 	?>
 	<p class=""> USD <input type="radio" name="devise" value="USD" "form-check-input">
-						 EUR <input type="radio" name="devise" value="EUR">
+						 EUR <input type="radio" name="devise" value="EUR" checked>
 	</p>
 	<p><input type="submit" class="btn btn-primary" value="JDF" name="creation"></p>
 </form>

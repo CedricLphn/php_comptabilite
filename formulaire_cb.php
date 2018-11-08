@@ -48,7 +48,7 @@ if(isset($_POST['creation']))
 			"id_utilisateur" => $_SESSION['id']
 		));
 
-		echo "Le compte a été édité.";
+		echo "<div class='alert alert-success'>Le compte a été édité.</div>";
 
 	}else {
 
@@ -92,19 +92,19 @@ if(isset($_POST['creation']))
 
 					$req->closeCursor();
 
-					echo "Le compte a été crée.";
+					echo "<div class='alert alert-success'>Le compte a été crée.</div>";
 
 				}else { // Il y a plus de dix comptes
-					echo "Impossible de créer plus de dix comptes.";
+					echo "<div class='alert alert-danger'>Impossible de créer plus de dix comptes.</div>";
 				}	
 
 
 			}else { // Le solde n'est pas un champ du numérique
-				echo "Le solde du compte n'est pas un chiffre numérique";
+				echo "<div class='alert alert-primary'>Le solde du compte n'est pas un chiffre numérique</div>";
 			}
 		
 		}else { // L'élément est manquant
-		echo "Elément manquant";
+		echo "<div class='alert alert-primary'>Elément manquant</div>";
 		}
 	}
 }
@@ -124,7 +124,7 @@ if(isset($_GET['supprimer'])){
 			"id_utilisateur" => $_SESSION['id']
 		));
 
-		echo "Le compte a été supprimé.";
+		echo "<div class='alert alert-success'>Le compte a été supprimé.</div>";
 	}
 
 }

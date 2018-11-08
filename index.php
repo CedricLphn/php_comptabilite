@@ -88,21 +88,31 @@ if(isset($_POST['operation']))
             $req2 = $req2->fetch();
 
             $solde = $req2["solde"]; // This is the solde
-            
 
-            
-
-            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            // Voudrais-t-on éditer ou modifier l'opération ??
 
             if($edit) {
                 
-               
+                // ON SOUHAITE MODIFIER
                 // on récupère le montant de l'opération actuelle
                 $req_op = $bdd->prepare("SELECT montant_operation FROM operation WHERE id_operation = ?");
                 $req_op->execute(array($id_operation));
                 $req_op = $req_op->fetch();
                 
                 $ancien_montant_operation = $req_op["montant_operation"];
+
+                /**
+                 * EXEMPLE CONCRET:
+                 * On part du principe que le solde est de 100€
+                 * On fais une transaction de 10€(debit) donc le SOLDE est à 90e
+                 * MAIS on s'est gourré 
+                 * c'est pas 10€ mais 11€
+                 * donc le solde doit changer en conséquence
+                 * pour un débit
+                 * NOUVEAU SOLDE = ANCIEN SOLDE + montant de l'opération erronée - le nouveau montant de la transaction
+                 * pour un crédit :
+                 * NOUVEAU SOLDE  = ANCIEN SOLDE - montant de l'opération merdique + le nouveau montant de la transaction
+                 */
 
                 if($data_cat["type_transaction"] == "debit")
                 {
@@ -112,6 +122,9 @@ if(isset($_POST['operation']))
                     $solde = ($solde - $ancien_montant_operation) + $montant;
                 }
                 
+                
+                // On update l'opération
+
                 $req = $bdd->prepare("UPDATE operation
                 SET nom_operation = :nom_operation, montant_operation = :montant_operation, id_categorie = :id_categorie, id_cb = :id_cb
                 WHERE id_operation = :id_operation");
@@ -123,9 +136,10 @@ if(isset($_POST['operation']))
                     "id_cb" => $compte,
                     "id_operation" => $id_operation));
 
-                echo "L'opération a été modifiée.";
+                echo "<div class='alert alert-success'>L'opération a été modifiée.</div>";
 
             }else{
+                // ON SOUHAITE AJOUTER
                 $req = $bdd->prepare("INSERT INTO operation(id_cb,id_categorie,nom_operation,montant_operation)
                 VALUES (:id_cb,:id_categorie,:nom_operation,:montant_operation);");
                 $req->execute(array(
@@ -141,7 +155,7 @@ if(isset($_POST['operation']))
                     $solde = $solde + $montant;
                 }
                 
-                echo "L'opération a été ajoutée.";
+                echo "<div class='alert alert-success'>L'opération a été ajoutée.</div>";
             }
 
 
@@ -157,10 +171,10 @@ if(isset($_POST['operation']))
             ));
 
         }else {
-            echo "Le montant n'est pas un chiffre numérique";
+            echo "<div class='alert alert-warning'>Le montant n'est pas un chiffre numérique</div>";
         }
     }else {
-        echo "Un champ est vide.";
+        echo "<div class='alert alert-warning'>Un champ est vide.</div>";
     }
 }
 
@@ -211,7 +225,7 @@ if(isset($_GET['supprimer'])){
 			"id_operation" => $id_operation,
 		));
 
-		echo "L'opération a été supprimé.";
+		echo "<div class='alert alert-success'>L'opération a été supprimé.</div>";
 	}
 
 }
