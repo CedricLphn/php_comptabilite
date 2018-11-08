@@ -84,7 +84,7 @@ if(isset($_POST['operation']))
             // le problème : c'est qu'on peut le savoir uniquement grâce à la table categorie
             // Solution: faire une requête dans la table categorie
             
-            $req1 = $bdd->prepare("SELECT type_transaction FROM categorie 
+            $req1 = $bdd->prepare("SELECT montant_operation type_transaction FROM categorie 
             WHERE id_categorie = ?");
             $req1->execute (array(
                 $categorie
@@ -106,11 +106,24 @@ if(isset($_POST['operation']))
 
             $solde = $req2["solde"]; // This is the solde
 
-            if($data_cat["type_transaction"] == "debit")
+            var_dump($data_cat);
+            die();
+
+            if($edit)
             {
-                $solde = $solde - $montant;
+                if($data_cat["type_transaction"] == "debit")
+                {
+                    $solde = ($solde + $data_cat['montant_operation']) - $montant;
+                }else {
+                    $solde = ($solde + $data_cat['montant_operation']) + $montant;
+                }
             }else {
-                $solde = $solde + $montant;
+                if($data_cat["type_transaction"] == "debit")
+                {
+                    $solde = $solde - $montant;
+                }else {
+                    $solde = $solde + $montant;
+                }
             }
 
             // On met à jour le solde
