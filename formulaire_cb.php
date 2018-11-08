@@ -33,12 +33,18 @@ if(isset($_POST['creation']))
 {
 	if($edit) {
 		$mon_compte = $_POST['nom_du_compte'];
-
-		$req = $bdd->prepare ("UPDATE compte_bancaire SET nom_compte = :nom_compte 
+		$type = $_POST['type_de_compte'];
+		$devise = $_POST['devise'];
+		
+		$req = $bdd->prepare("UPDATE compte_bancaire SET nom_compte = :nom_compte, 
+		type_compte = :type_compte,
+		devise = :devise
 		WHERE id_cb = :id_cb AND id_utilisateur = :id_utilisateur");
 		$req->execute (array(
 			"nom_compte" => $mon_compte,
-			"id_cb" => $id_cb1,
+			"type_compte" => $type,
+			"devise" => $devise,
+			"id_cb" => $_GET['editer'],
 			"id_utilisateur" => $_SESSION['id']
 		));
 
@@ -53,10 +59,10 @@ if(isset($_POST['creation']))
 
 		{ 
 
-			$nom_du_compte = $_POST['nom_du_compte'];
-			$type_de_compte = $_POST['type_de_compte'];
-			$solde_compte = $_POST['solde_compte'];
-			$devise = $_POST['devise'];
+			$nom_du_compte = htmlspecialchars($_POST['nom_du_compte']);
+			$type_de_compte = htmlspecialchars($_POST['type_de_compte']);
+			$solde_compte = htmlspecialchars($_POST['solde_compte']);
+			$devise = htmlspecialchars($_POST['devise']);
 
 
 			if(is_numeric($solde_compte)) { // On vérifie si le solde tapé est numérique
