@@ -5,8 +5,8 @@ function connexion_bdd() {
         $host = "localhost";
         $nombdd = "comptabilite";
         $utilisateur = "root";
-        $mdp = "root"; 
-        $port = 8889;
+        $mdp = ""; 
+        $port = 3306;
 
         $bdd = new PDO(
             "mysql:host=$host;port=$port;dbname=$nombdd",
