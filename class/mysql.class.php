@@ -4,6 +4,7 @@ class Mysql {
     
     private $db;
     private $pdo;
+    private $data = false;
     
     function __construct(string $host = "localhost", string $username = "root", string $pwd = null, int $port, string $db)
     {
@@ -20,6 +21,8 @@ class Mysql {
         return true;
     }
 
+    
+    
     private function getPdo() {
         if($this->pdo == null) {
             try {
@@ -34,6 +37,33 @@ class Mysql {
         }
 
         return $this->pdo;
+    }
+
+
+
+    public function prepare(string $statement, array $options) {
+        $this->getPdo();
+        $req = $this->pdo->prepare($statement);
+        $req->execute($options);
+
+        if($req == true)
+        {
+            $this->data = $req;
+            return $req;
+        }else {
+            return Config::info("Erreur:" . $req);
+        }
+
+    }
+
+    public function fetch() {
+        $this->getPdo();
+        if($this->data) {
+            return $this->data->fetch();
+        }else {
+            Config::info("Erreur data vide");
+            return false;
+        }
     }
 
 }
