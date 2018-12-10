@@ -6,7 +6,7 @@ class Mysql {
     private $pdo;
     private $data = false;
     
-    function __construct(string $host = "localhost", string $username = "root", string $pwd = null, int $port, string $db)
+    function __construct(string $host = "localhost", string $username = "root", string $pwd = null, int $port = 3306, string $db = "comptabilite")
     {
         $this->db = [
             "host" => $host,
@@ -21,7 +21,9 @@ class Mysql {
         return true;
     }
 
-    
+    public static function getDb() {
+        return new Mysql();
+    }
     
     private function getPdo() {
         if($this->pdo == null) {
@@ -42,8 +44,13 @@ class Mysql {
 
 
     public function prepare(string $statement, array $options) {
-        $this->getPdo();
+        if(!$this->pdo) {
+            $this->getPdo();
+        }
+
         $req = $this->pdo->prepare($statement);
+        var_dump(get_class($this));
+        $req->setFetchMode(PDO::FETCH_CLASS, get_class($this));
         $req->execute($options);
 
         if($req == true)
