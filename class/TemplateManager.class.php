@@ -6,7 +6,8 @@ class TemplateManager {
         "header" => "template/header.php",
         "content" => null,
         "footer" => "template/footer.php",
-        "dirPages" => "pages/"
+        "dirPages" => "pages/",
+        "data" => []
     ];
 
     /**
@@ -88,6 +89,17 @@ class TemplateManager {
         return true;
     }
 
+    /**
+     * Set data in template page (alpha)
+     *
+     * @param array $data
+     * @return boolean
+     */
+    public function set(array $data) : bool {
+        $this->tpl["data"] = $data;
+        return true;
+    }
+
 
     /**
      * Show the page
@@ -95,6 +107,7 @@ class TemplateManager {
      * @return boolean
      */
     public function show() : bool {
+        $data = $this->tpl["data"];
         require_once($this->tpl["header"]);
         ($this->tpl["content"] == null) ? "please insert content file" : require_once($this->tpl["dirPages"].$this->tpl["content"]);
         require_once($this->tpl["footer"]);
