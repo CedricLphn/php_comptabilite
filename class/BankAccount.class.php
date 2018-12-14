@@ -14,6 +14,7 @@ class BankAccount {
     public function getAccountInfo() {
         $test = "ok";
         $this->tpl->set(array("test" => "hello world"));
+        $this->tpl->set(array("testddd" => array("test")));
         $this->tpl->show();
         Config::info($this->tpl);
 

@@ -96,7 +96,7 @@ class TemplateManager {
      * @return boolean
      */
     public function set(array $data) : bool {
-        $this->tpl["data"] = $data;
+        $this->tpl["data"] += $data;
         return true;
     }
 
