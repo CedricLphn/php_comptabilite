@@ -12,8 +12,12 @@ $config = Config::getInstance();
 // $db->prepare("SELECT * FROM operation WHERE id_operation = ?",
 // [2])->fetch();
 
-$db = new BankAccount();
-$req = $db->getAccountInfo();
+// $db = new BankAccount();
+// $req = $db->getAccountInfo();
 
-var_dump($req);
+//var_dump($req);
+
+$page = new BankAccount();
+//$page->getAccountInfo();
+
 ?>

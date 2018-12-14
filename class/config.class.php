@@ -34,7 +34,9 @@ class Config {
 
     public static function info($message) {
         if(!self::getInstance()->get('site', 'prod')) {
+            echo "<pre>";
             var_dump($message);
+            echo "</pre>";
         }
 
         return $message;

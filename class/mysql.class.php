@@ -6,8 +6,17 @@ class Mysql {
     private $pdo;
     private $data = false;
     
-    function __construct(string $host = "localhost", string $username = "root", string $pwd = null, int $port = 3306, string $db = "comptabilite")
+    function __construct(?string $host = null, ?string $username = null, ?string $pwd = null, ?int $port = 3306, ?string $db = "comptabilite")
     {
+        if($host == null)
+        {
+            $config = new Config();
+            $host = $config->dbInfo("hostname");
+            $username = $config->dbInfo("username");
+            $pwd = $config->dbInfo("password");
+            $port = $config->dbInfo("port");
+        }
+
         $this->db = [
             "host" => $host,
             "username" => $username,
@@ -49,7 +58,6 @@ class Mysql {
         }
 
         $req = $this->pdo->prepare($statement);
-        var_dump(get_class($this));
         $req->setFetchMode(PDO::FETCH_CLASS, get_class($this));
         $req->execute($options);
 
